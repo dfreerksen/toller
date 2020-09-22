@@ -18,6 +18,9 @@ class PostsController < ApplicationController
   # Text
   sort_on :body, type: :text
 
+  # Datetime
+  sort_on :published_at, type: :datetime
+
   def index
     render json: filtrate(Post.all)
   end
