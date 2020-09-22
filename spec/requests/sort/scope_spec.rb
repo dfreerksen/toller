@@ -8,33 +8,33 @@ RSpec.describe 'Post sorting', type: :request do
     Post.create(title: 'Bar Post')
   end
 
-  describe 'when sorting by `title` string' do
-    describe 'with ascending order (`?sort=title`)' do
+  describe 'when sorting by defined scope `the_title`' do
+    describe 'with ascending order (`?sort=the_title`)' do
       it 'returns the first item first' do
-        get '/posts', params: { sort: 'title' },
+        get '/posts', params: { sort: 'the_title' },
                       headers: { accept: 'application/json' }
 
         expect(json_response[0][:title]).to eq('Bar Post')
       end
 
       it 'returns the last item last' do
-        get '/posts', params: { sort: 'title' },
+        get '/posts', params: { sort: 'the_title' },
                       headers: { accept: 'application/json' }
 
         expect(json_response[-1][:title]).to eq('Foo Post')
       end
     end
 
-    describe 'with descending order (`?sort=-title`)' do
+    describe 'with descending order (`?sort=-the_title`)' do
       it 'returns the first item last' do
-        get '/posts', params: { sort: '-title' },
+        get '/posts', params: { sort: '-the_title' },
                       headers: { accept: 'application/json' }
 
         expect(json_response[0][:title]).to eq('Foo Post')
       end
 
       it 'returns the last item first' do
-        get '/posts', params: { sort: '-title' },
+        get '/posts', params: { sort: '-the_title' },
                       headers: { accept: 'application/json' }
 
         expect(json_response[-1][:title]).to eq('Bar Post')
@@ -42,33 +42,33 @@ RSpec.describe 'Post sorting', type: :request do
     end
   end
 
-  describe 'when sorting by alias `post_title`' do
-    describe 'with ascending order (`?sort=post_title`)' do
+  describe 'when sorting with custom defined scope_name `my_title`' do
+    describe 'with ascending order (`?sort=my_title`)' do
       it 'returns the first item first' do
-        get '/posts', params: { sort: 'post_title' },
+        get '/posts', params: { sort: 'my_title' },
                       headers: { accept: 'application/json' }
 
         expect(json_response[0][:title]).to eq('Bar Post')
       end
 
       it 'returns the last item last' do
-        get '/posts', params: { sort: 'post_title' },
+        get '/posts', params: { sort: 'my_title' },
                       headers: { accept: 'application/json' }
 
         expect(json_response[-1][:title]).to eq('Foo Post')
       end
     end
 
-    describe 'with descending order (`?sort=-post_title`)' do
+    describe 'with descending order (`?sort=-my_title`)' do
       it 'returns the first item last' do
-        get '/posts', params: { sort: '-post_title' },
+        get '/posts', params: { sort: '-my_title' },
                       headers: { accept: 'application/json' }
 
         expect(json_response[0][:title]).to eq('Foo Post')
       end
 
       it 'returns the last item first' do
-        get '/posts', params: { sort: '-post_title' },
+        get '/posts', params: { sort: '-my_title' },
                       headers: { accept: 'application/json' }
 
         expect(json_response[-1][:title]).to eq('Bar Post')
