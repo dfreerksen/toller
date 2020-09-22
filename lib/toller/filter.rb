@@ -19,13 +19,9 @@ module Toller
 
     def apply!(collection, value)
       if type == :scope
-        scoped_name = properties[:scope_name] || properties[:field]
-
-        collection.public_send(scoped_name, value)
+        Filters::ScopeHandler.new.call(collection, value, properties)
       else
-        field_name = properties[:field]
-
-        collection.where(field_name => value)
+        Filters::WhereHandler.new.call(collection, value, properties)
       end
     end
 

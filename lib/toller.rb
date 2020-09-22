@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 require 'toller/filter'
+require 'toller/filters/scope_handler'
+require 'toller/filters/where_handler'
 require 'toller/filtrator'
 require 'toller/sort'
+require 'toller/sorts/order_handler'
+require 'toller/sorts/scope_handler'
 
 ##
 # Toller

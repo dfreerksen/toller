@@ -19,13 +19,9 @@ module Toller
 
     def apply!(collection, direction = :asc)
       if type == :scope
-        scoped_name = properties[:scope_name] || properties[:field]
-
-        collection.public_send(scoped_name, direction)
+        Sorts::ScopeHandler.new.call(collection, direction, properties)
       else
-        field_name = properties[:field]
-
-        collection.order(field_name => direction)
+        Sorts::OrderHandler.new.call(collection, direction, properties)
       end
     end
 
