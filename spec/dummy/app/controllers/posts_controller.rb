@@ -13,6 +13,7 @@ class PostsController < ApplicationController
   filter_on :post_title, type: :string, field: :title
 
   # Filter - Text
+  filter_on :body, type: :text
 
   # Filter - Datetime
 
