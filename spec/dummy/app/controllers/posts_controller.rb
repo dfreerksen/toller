@@ -9,6 +9,8 @@ class PostsController < ApplicationController
   filter_on :visible, type: :boolean
 
   # Filter - String
+  filter_on :title, type: :string
+  filter_on :post_title, type: :string, field: :title
 
   # Filter - Text
 
