@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-module Retrieve
+module Toller
   ##
-  # Sort
+  # Filter
   #
-  class Sort
+  class Filter
     attr_reader :parameter, :properties, :type
 
     def initialize(parameter, type, options)
@@ -17,15 +17,15 @@ module Retrieve
       )
     end
 
-    def apply!(collection, direction = :asc)
+    def apply!(collection, value)
       if type == :scope
         scoped_name = properties[:scope_name] || properties[:field]
 
-        collection.public_send(scoped_name, direction)
+        collection.public_send(scoped_name, value)
       else
         field_name = properties[:field]
 
-        collection.order(field_name => direction)
+        collection.where(field_name => value)
       end
     end
 

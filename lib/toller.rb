@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'retrieve/filter'
-require 'retrieve/filtrator'
-require 'retrieve/sort'
+require 'toller/filter'
+require 'toller/filtrator'
+require 'toller/sort'
 
 ##
-# Retrieve
+# Toller
 #
 # Query param based filtering and sorting
 #
-module Retrieve
+module Toller
   extend ActiveSupport::Concern
 
   def filtrate(collection)

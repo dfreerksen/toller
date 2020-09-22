@@ -17,7 +17,7 @@ require 'sprockets/railtie'
 
 Bundler.require(*Rails.groups)
 
-require 'retrieve'
+require 'toller'
 
 module Dummy
   class Application < Rails::Application

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Retrieve
+module Toller
   module TestingSupport
     ##
     # JSON helpers for testing
@@ -14,5 +14,5 @@ module Retrieve
 end
 
 RSpec.configure do |config|
-  config.include Retrieve::TestingSupport::JsonHelpers, type: :request
+  config.include Toller::TestingSupport::JsonHelpers, type: :request
 end

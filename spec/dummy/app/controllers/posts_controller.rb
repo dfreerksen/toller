@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class PostsController < ApplicationController
-  include Retrieve
+  include Toller
 
   # Default
   sort_on :default_sort_on_title, type: :scope, default: true

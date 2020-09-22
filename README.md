@@ -1,4 +1,4 @@
-# Retrieve
+# Toller
 
 URL based filtering and sorting.
 
@@ -7,7 +7,7 @@ URL based filtering and sorting.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'retrieve'
+gem 'toller'
 ```
 
 And then execute:
