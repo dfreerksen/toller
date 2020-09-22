@@ -22,5 +22,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'pry-byebug', '~> 3.9.0', require: false
   gem 'rspec-rails', '~> 4.0.1', require: false
+  gem 'simplecov', '~> 0.19.0', require: false
 end

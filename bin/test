@@ -1,6 +1,4 @@
-#!/usr/bin/env ruby
+#!/bin/sh
 
-$LOAD_PATH << File.expand_path('../test', __dir__)
-
-require 'bundler/setup'
-require 'rails/plugin/test'
+RAILS_ENV=test bundle exec rake db:drop db:create db:schema:load
+RAILS_ENV=test bundle exec rspec spec
