@@ -22,15 +22,15 @@ module Toller
 
   class_methods do
     def filter_on(parameter, type:, **options)
-      filters << Filter.new(parameter, type, options)
+      _filters << Filter.new(parameter, type, options)
     end
 
     def sort_on(parameter, type:, **options)
-      filters << Sort.new(parameter, type, options)
+      _filters << Sort.new(parameter, type, options)
     end
 
-    def filters
-      @filters ||= []
+    def _filters
+      @_filters ||= []
     end
   end
 
@@ -53,6 +53,6 @@ module Toller
   private
 
   def retrievals
-    self.class.ancestors.flat_map { |klass| klass.try(:filters) }.compact
+    self.class.ancestors.flat_map { |klass| klass.try(:_filters) }.compact
   end
 end
