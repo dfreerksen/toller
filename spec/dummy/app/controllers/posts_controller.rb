@@ -21,6 +21,12 @@ class PostsController < ApplicationController
   # Datetime
   sort_on :published_at, type: :datetime
 
+  # Date
+  sort_on :expiration_date, type: :date
+
+  # Time
+  sort_on :expiration_time, type: :time
+
   def index
     render json: filtrate(Post.all)
   end
