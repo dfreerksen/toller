@@ -4,8 +4,8 @@ require 'rails_helper'
 
 RSpec.describe 'Post sorting', type: :request do
   before do
-    Post.create(body: 'First post body')
-    Post.create(body: 'Second post body')
+    Post.create(body: 'Foo post body')
+    Post.create(body: 'Bar post body')
   end
 
   describe 'when sorting by `body` text' do
@@ -14,14 +14,14 @@ RSpec.describe 'Post sorting', type: :request do
         get '/posts', params: { sort: 'body' },
                       headers: { accept: 'application/json' }
 
-        expect(json_response[0][:body]).to eq('First post body')
+        expect(json_response[0][:body]).to eq('Bar post body')
       end
 
       it 'returns the last item last' do
         get '/posts', params: { sort: 'body' },
                       headers: { accept: 'application/json' }
 
-        expect(json_response[-1][:body]).to eq('Second post body')
+        expect(json_response[-1][:body]).to eq('Foo post body')
       end
     end
 
@@ -30,14 +30,14 @@ RSpec.describe 'Post sorting', type: :request do
         get '/posts', params: { sort: '-body' },
                       headers: { accept: 'application/json' }
 
-        expect(json_response[0][:body]).to eq('Second post body')
+        expect(json_response[0][:body]).to eq('Foo post body')
       end
 
       it 'returns the last item first' do
         get '/posts', params: { sort: '-body' },
                       headers: { accept: 'application/json' }
 
-        expect(json_response[-1][:body]).to eq('First post body')
+        expect(json_response[-1][:body]).to eq('Bar post body')
       end
     end
   end

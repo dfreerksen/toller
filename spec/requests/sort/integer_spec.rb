@@ -3,8 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Post sorting', type: :request do
-  let(:first) { Post.create(title: 'First Post') }
-  let(:second) { Post.create(title: 'Second Post') }
+  let(:first) { Post.create(title: 'Foo Post') }
+  let(:second) { Post.create(title: 'Bar Post') }
 
   before do
     first
