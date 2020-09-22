@@ -3,29 +3,48 @@
 class PostsController < ApplicationController
   include Toller
 
-  # Default
+  # Filter - Integer
+
+  # Filter - Boolean
+  filter_on :visible, type: :boolean
+
+  # Filter - String
+
+  # Filter - Text
+
+  # Filter - Datetime
+
+  # Filter - Date
+
+  # Filter - Time
+
+  # Filter - Scope
+
+  # Sort - Default
   sort_on :default_sort_on_title, type: :scope, default: true
 
-  # String
-  sort_on :title, type: :string
-  sort_on :post_title, type: :string, field: :title
-  sort_on :the_title, type: :scope
-  sort_on :my_title, type: :scope, scope_name: :sort_on_title
-
-  # Integer
+  # Sort - Integer
   sort_on :id, type: :integer
 
-  # Text
+  # Sort - String
+  sort_on :title, type: :string
+  sort_on :post_title, type: :string, field: :title
+
+  # Sort - Text
   sort_on :body, type: :text
 
-  # Datetime
+  # Sort - Datetime
   sort_on :published_at, type: :datetime
 
-  # Date
+  # Sort - Date
   sort_on :expiration_date, type: :date
 
-  # Time
+  # Sort - Time
   sort_on :expiration_time, type: :time
+
+  # Sort - Scope
+  sort_on :the_title, type: :scope
+  sort_on :my_title, type: :scope, scope_name: :sort_on_title
 
   def index
     render json: filtrate(Post.all)
