@@ -17,7 +17,7 @@ module Toller
       private
 
       def value_mutator(type, value)
-        return value unless %i[boolean date datetime integer jsonb time].include?(type)
+        return value unless %i[boolean date datetime integer time].include?(type)
 
         send("#{type}_mutator", value)
       end
@@ -40,10 +40,6 @@ module Toller
 
       def datetime_mutator(value)
         Mutators::Datetime.call(value)
-      end
-
-      def jsonb_mutator(value)
-        Mutators::Jsonb.call(value)
       end
     end
   end
