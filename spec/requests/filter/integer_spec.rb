@@ -73,5 +73,43 @@ RSpec.describe 'Post filtering', type: :request do
         expect(json_response.size).to eq(3)
       end
     end
+
+    describe 'with inclusive (..) range of items (`?filter[priority]=0..2`)' do
+      before do
+        get '/posts', params: { filters: { priority: '0..2' } },
+                      headers: { accept: 'application/json' }
+      end
+
+      it 'returns the first item' do
+        expect(json_response[0][:title]).to eq('Bar Post')
+      end
+
+      it 'returns the last item' do
+        expect(json_response[-1][:title]).to eq('Foo Post')
+      end
+
+      it 'returns the last invisible item' do
+        expect(json_response.size).to eq(4)
+      end
+    end
+
+    describe 'with exclusive (...) range of items (`?filter[priority]=0...2`)' do
+      before do
+        get '/posts', params: { filters: { priority: '0...2' } },
+                      headers: { accept: 'application/json' }
+      end
+
+      it 'returns the first item' do
+        expect(json_response[0][:title]).to eq('Bar Post')
+      end
+
+      it 'returns the last item' do
+        expect(json_response[-1][:title]).to eq('Foo Post')
+      end
+
+      it 'returns the last invisible item' do
+        expect(json_response.size).to eq(4)
+      end
+    end
   end
 end

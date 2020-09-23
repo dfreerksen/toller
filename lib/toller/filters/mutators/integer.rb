@@ -10,19 +10,26 @@ module Toller
         module_function
 
         def call(value)
-          if range?(value)
-            range(value)
-          else
-            value
-          end
+          return value unless range?(value)
+
+          range(value)
         end
 
         def range?(value)
-          value.include?('..')
+          range_dots = inclusive_or_exclusive_range(value)
+
+          range_dots.present?
         end
 
         def range(value)
-          Range.new(*value.split('..'))
+          Range.new(*value.split(inclusive_or_exclusive_range(value)))
+        end
+
+        def inclusive_or_exclusive_range(value)
+          return '...' if value.include?('...')
+          return '..' if value.include?('..')
+
+          nil
         end
       end
     end
