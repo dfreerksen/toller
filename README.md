@@ -20,34 +20,17 @@ $ bundle install
 
 Filters are not automagically set up for you. You define the filters you want.
 
-### Filter Types
+Filtering parameters are passed in the URL as such `?filters[visible]=1`. Multiple filter parameters can be passed like so `?filters[visible]=1&filters[published_after]=2020-07-04`.
 
-* integer - Filter on an integer column
-* boolean - Filter on a boolean column
-* string - Filter on a string column
-* text - Filter on a text column
-* date - Filter on a date column
-* time - Filter on a time column
-* datetime - Filter on a datetime column
-* scope - Filter on an ActiveRecord scope
+More information is [available in the wiki](https://github.com/dfreerksen/toller/wiki/Filter).
 
-## Sort
+## Sorting
 
 Sorting is not automagically set up for you. You define the sorting you want.
 
-Sort parameters are passed in the URL as such `?sort=position`. Multiple sort parameters can be passed like so `?sort=-published_at,title`.
+Sorting parameters are passed in the URL as such `?sort=position`. Multiple sort parameters can be passed like so `?sort=-published_at,title`.
 
-### Sort Types
-
-Every sort must have a type. Valid sort types are:
-
-* integer - Sort on an integer column
-* string - Sort on a string column
-* text - Sort on a text column
-* date - Sort on a date column
-* time - Sort on a time column
-* datetime - Sort on a datetime column
-* scope - Sort on an ActiveRecord scope
+More information is [available in the wiki](https://github.com/dfreerksen/toller/wiki/Sort).
 
 ## Testing
 
