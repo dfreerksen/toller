@@ -38,6 +38,22 @@ More information is [available in the wiki](https://github.com/dfreerksen/toller
 $ bin/test
 ```
 
+### Appraisal
+
+```bash
+$ bundle exec appraisal install
+$ bundle exec appraisal rails-5 bin/test
+$ bundle exec appraisal rails-6 bin/test
+```
+
+### WWTD
+
+Test against the Travis simulator. Note that [WWTD](https://github.com/grosser/wwtd) needs to be installed (install with `gem install wwtd`)
+
+```bash
+$ wwtd
+```
+
 ## Release
 
 1. Bump the gem version in `lib/toller/version.rb`

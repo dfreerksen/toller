@@ -14,7 +14,11 @@ Gem::Specification.new do |spec|
   spec.description = 'Description of Toller.'
   spec.license     = 'MIT'
 
+  spec.required_ruby_version = '>= 2.5.8'
+
   spec.files = Dir['{lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
-  spec.add_dependency 'rails', '~> 6.0.3', '>= 6.0.3.2'
+  spec.add_dependency 'rails', '>= 5.0'
+
+  spec.add_development_dependency 'appraisal', '~> 2.3.0'
 end
