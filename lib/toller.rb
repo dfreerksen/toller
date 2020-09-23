@@ -8,7 +8,7 @@ require 'toller/filters/mutators/integer'
 require 'toller/filters/mutators/time'
 require 'toller/filters/scope_handler'
 require 'toller/filters/where_handler'
-require 'toller/filtrator'
+require 'toller/retriever'
 require 'toller/sort'
 require 'toller/sorts/order_handler'
 require 'toller/sorts/scope_handler'
@@ -21,8 +21,8 @@ require 'toller/sorts/scope_handler'
 module Toller
   extend ActiveSupport::Concern
 
-  def filtrate(collection)
-    Filtrator.filter(collection, filter_params, sort_params, retrievals)
+  def retrieve(collection)
+    Retriever.filter(collection, filter_params, sort_params, retrievals)
   end
 
   included do

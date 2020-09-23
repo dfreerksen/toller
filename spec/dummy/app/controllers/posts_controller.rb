@@ -58,6 +58,6 @@ class PostsController < ApplicationController
   sort_on :my_title, type: :scope, scope_name: :sort_on_title
 
   def index
-    render json: filtrate(Post.all)
+    render json: retrieve(Post.all)
   end
 end

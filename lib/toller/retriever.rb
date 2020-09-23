@@ -2,9 +2,9 @@
 
 module Toller
   ##
-  # Filtrator
+  # Retriever
   #
-  class Filtrator
+  class Retriever
     attr_reader :collection, :filter_params, :retrievals, :sort_params
 
     def self.filter(collection, filter_params, sort_params, retrievals)
