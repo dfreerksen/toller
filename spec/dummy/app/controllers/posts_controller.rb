@@ -17,11 +17,13 @@ class PostsController < ApplicationController
   filter_on :body, type: :text
 
   # Filter - Datetime
+  filter_on :published_at, type: :datetime
 
   # Filter - Date
   filter_on :expiration_date, type: :date
 
   # Filter - Time
+  filter_on :expiration_time, type: :time
 
   # Filter - Scope
   filter_on :body_contains, type: :scope, scope_name: :filter_on_body_contains

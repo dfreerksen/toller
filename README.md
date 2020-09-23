@@ -22,7 +22,14 @@ Filters are not automagically set up for you. You define the filters you want.
 
 ### Filter Types
 
-TODO
+* integer - Filter on an integer column
+* boolean - Filter on a boolean column
+* string - Filter on a string column
+* text - Filter on a text column
+* date - Filter on a date column
+* time - Filter on a time column
+* datetime - Filter on a datetime column
+* scope - Filter on an ActiveRecord scope
 
 ### Filter Usage
 
