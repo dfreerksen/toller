@@ -19,6 +19,7 @@ class PostsController < ApplicationController
   # Filter - Datetime
 
   # Filter - Date
+  filter_on :expiration_date, type: :date
 
   # Filter - Time
 
