@@ -2,6 +2,23 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
 
+Metrics/MethodLength:
+  Exclude:
+    - 'spec/dummy/db/**/*.rb'
+
 Metrics/ModuleLength:
   Exclude:
     - 'spec/**/*.rb'
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - 'spec/dummy/bin/*'
+    - 'spec/dummy/db/**/*.rb'
+
+Style/NumericLiterals:
+  Exclude:
+    - 'spec/dummy/**/*.rb'
+
+Style/StringLiterals:
+  Exclude:
+    - 'spec/dummy/**/*.rb'
