@@ -13,33 +13,31 @@ RSpec.describe 'Post sorting', type: :request do
 
   describe 'when sorting by `id` integer' do
     describe 'with ascending order (`?sort=id`)' do
-      it 'returns the first item first' do
+      before do
         get '/posts', params: { sort: 'id' },
                       headers: { accept: 'application/json' }
+      end
 
+      it 'returns the first item first' do
         expect(json_response[0][:id]).to eq(first.id)
       end
 
       it 'returns the last item last' do
-        get '/posts', params: { sort: 'id' },
-                      headers: { accept: 'application/json' }
-
         expect(json_response[-1][:id]).to eq(second.id)
       end
     end
 
     describe 'with descending order (`?sort=-id`)' do
-      it 'returns the first item last' do
+      before do
         get '/posts', params: { sort: '-id' },
                       headers: { accept: 'application/json' }
+      end
 
+      it 'returns the first item last' do
         expect(json_response[0][:id]).to eq(second.id)
       end
 
       it 'returns the last item first' do
-        get '/posts', params: { sort: '-id' },
-                      headers: { accept: 'application/json' }
-
         expect(json_response[-1][:id]).to eq(first.id)
       end
     end

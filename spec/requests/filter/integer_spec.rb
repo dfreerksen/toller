@@ -13,33 +13,31 @@ RSpec.describe 'Post filtering', type: :request do
 
   describe 'when filtering by `priority` integer' do
     describe 'with priority items (`?filter[priority]=1`)' do
-      it 'returns the first priority item' do
+      before do
         get '/posts', params: { filters: { priority: 1 } },
                       headers: { accept: 'application/json' }
+      end
 
+      it 'returns the first priority item' do
         expect(json_response[0][:title]).to eq('Bar Post')
       end
 
       it 'returns the last priority item' do
-        get '/posts', params: { filters: { priority: 1 } },
-                      headers: { accept: 'application/json' }
-
         expect(json_response[-1][:title]).to eq('Bat Post')
       end
     end
 
     describe 'with priority items in range (`?filter[priority]=1..3`)' do
-      it 'returns the first priority item' do
+      before do
         get '/posts', params: { filters: { priority: '1..3' } },
                       headers: { accept: 'application/json' }
+      end
 
+      it 'returns the first priority item' do
         expect(json_response[0][:title]).to eq('Bar Post')
       end
 
       it 'returns the last priority item' do
-        get '/posts', params: { filters: { priority: '1..3' } },
-                      headers: { accept: 'application/json' }
-
         expect(json_response[-1][:title]).to eq('Qux Post')
       end
 
@@ -52,24 +50,20 @@ RSpec.describe 'Post filtering', type: :request do
     end
 
     describe 'with priority items in array (`?filter[priority]=[1,3]`)' do
-      it 'returns the first priority item' do
+      before do
         get '/posts', params: { filters: { priority: [1, 3] } },
                       headers: { accept: 'application/json' }
+      end
 
+      it 'returns the first priority item' do
         expect(json_response[0][:title]).to eq('Bar Post')
       end
 
       it 'returns the last priority item' do
-        get '/posts', params: { filters: { priority: [1, 3] } },
-                      headers: { accept: 'application/json' }
-
         expect(json_response[-1][:title]).to eq('Qux Post')
       end
 
       it 'returns the correct number of priority array of items' do
-        get '/posts', params: { filters: { priority: [1, 3] } },
-                      headers: { accept: 'application/json' }
-
         expect(json_response.size).to eq(3)
       end
     end

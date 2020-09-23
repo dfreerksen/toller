@@ -10,17 +10,16 @@ RSpec.describe 'Post filtering', type: :request do
 
   describe 'when filtering by `body` text' do
     describe 'with items (`?filter[body]=Foo post body`)' do
-      it 'returns the first visible item' do
+      before do
         get '/posts', params: { filters: { body: 'Foo post body' } },
                       headers: { accept: 'application/json' }
+      end
 
+      it 'returns the first visible item' do
         expect(json_response[0][:body]).to eq('Foo post body')
       end
 
       it 'returns specific item count' do
-        get '/posts', params: { filters: { body: 'Foo post body' } },
-                      headers: { accept: 'application/json' }
-
         expect(json_response.size).to eq(1)
       end
     end

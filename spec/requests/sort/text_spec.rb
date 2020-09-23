@@ -10,33 +10,31 @@ RSpec.describe 'Post sorting', type: :request do
 
   describe 'when sorting by `body` text' do
     describe 'with ascending order (`?sort=body`)' do
-      it 'returns the first item first' do
+      before do
         get '/posts', params: { sort: 'body' },
                       headers: { accept: 'application/json' }
+      end
 
+      it 'returns the first item first' do
         expect(json_response[0][:body]).to eq('Bar post body')
       end
 
       it 'returns the last item last' do
-        get '/posts', params: { sort: 'body' },
-                      headers: { accept: 'application/json' }
-
         expect(json_response[-1][:body]).to eq('Foo post body')
       end
     end
 
     describe 'with descending order (`?sort=-body`)' do
-      it 'returns the first item last' do
+      before do
         get '/posts', params: { sort: '-body' },
                       headers: { accept: 'application/json' }
+      end
 
+      it 'returns the first item last' do
         expect(json_response[0][:body]).to eq('Foo post body')
       end
 
       it 'returns the last item first' do
-        get '/posts', params: { sort: '-body' },
-                      headers: { accept: 'application/json' }
-
         expect(json_response[-1][:body]).to eq('Bar post body')
       end
     end
