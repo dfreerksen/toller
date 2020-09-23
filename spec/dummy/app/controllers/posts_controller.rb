@@ -23,6 +23,7 @@ class PostsController < ApplicationController
   # Filter - Time
 
   # Filter - Scope
+  filter_on :body_contains, type: :scope, scope_name: :filter_on_body_contains
 
   # Sort - Default
   sort_on :default_sort_on_title, type: :scope, default: true
