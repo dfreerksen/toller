@@ -1,6 +1,6 @@
 # Toller
 
-URL based filtering and sorting.
+URL based filtering and sorting. See the wiki for usage information.
 
 ## Installation
 
@@ -31,16 +31,6 @@ Filters are not automagically set up for you. You define the filters you want.
 * datetime - Filter on a datetime column
 * scope - Filter on an ActiveRecord scope
 
-### Filter Usage
-
-#### Controller
-
-TODO
-
-#### Model
-
-TODO
-
 ## Sort
 
 Sorting is not automagically set up for you. You define the sorting you want.
@@ -58,16 +48,6 @@ Every sort must have a type. Valid sort types are:
 * time - Sort on a time column
 * datetime - Sort on a datetime column
 * scope - Sort on an ActiveRecord scope
-
-### Sort Usage
-
-#### Controller
-
-TODO
-
-#### Model
-
-TODO
 
 ## Testing
 
