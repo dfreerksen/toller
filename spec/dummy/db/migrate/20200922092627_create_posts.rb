@@ -10,6 +10,7 @@ class CreatePosts < ActiveRecord::Migration[6.0]
       t.time :expiration_time
       t.datetime :published_at
       t.json :metadata
+      t.datetime :deleted_at
 
       t.timestamps
     end

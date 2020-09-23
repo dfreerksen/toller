@@ -3,6 +3,9 @@
 class PostsController < ApplicationController
   include Toller
 
+  # Sort - Default
+  filter_on :default_filter_on_published_at, type: :scope, default: true
+
   # Filter - Integer
   filter_on :priority, type: :integer
 
