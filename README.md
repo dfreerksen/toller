@@ -38,6 +38,23 @@ More information is [available in the wiki](https://github.com/dfreerksen/toller
 $ bin/test
 ```
 
+## Release
+
+1. Bump the gem version in `lib/toller/version.rb`
+2. Build the gem with
+
+   ```
+   $ bundle exec rake build
+   ```
+
+   This will create a new .gem file in `pkg/`. Fix any errors or warnings that come up.
+3. Commit the version change to git with a commit message similar to "Release [X.Y.Z]"
+4. Create the gem, tag it in Github and release to Rubygems
+
+   ```
+   $ bundle exec rake release
+   ```
+
 ## Contributing
 
 1. Fork it ([https://github.com/dfrerksen/recieve/fork](https://github.com/dfrerksen/recieve/fork))
