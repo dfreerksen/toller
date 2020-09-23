@@ -1,0 +1,16 @@
+language: ruby
+rvm:
+  - 2.5
+  - 2.6
+  - 2.7
+cache:
+  bundler: true
+gemfile:
+  - gemfiles/rails_5.gemfile
+  - gemfiles/rails_6.gemfile
+before_install:
+  - gem update --system --no-document
+  - gem install rake
+  - gem install bundler
+script:
+  - bin/test
