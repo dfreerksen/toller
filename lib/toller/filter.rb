@@ -21,7 +21,7 @@ module Toller
       if type == :scope
         Filters::ScopeHandler.new.call(collection, value, properties)
       else
-        Filters::WhereHandler.new.call(collection, value, properties)
+        Filters::WhereHandler.new.call(collection, type, value, properties)
       end
     end
 

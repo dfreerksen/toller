@@ -4,6 +4,7 @@ class PostsController < ApplicationController
   include Toller
 
   # Filter - Integer
+  filter_on :priority, type: :integer
 
   # Filter - Boolean
   filter_on :visible, type: :boolean

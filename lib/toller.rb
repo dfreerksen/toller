@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 require 'toller/filter'
+require 'toller/filters/mutators/boolean'
+require 'toller/filters/mutators/date'
+require 'toller/filters/mutators/datetime'
+require 'toller/filters/mutators/integer'
+require 'toller/filters/mutators/jsonb'
+require 'toller/filters/mutators/time'
 require 'toller/filters/scope_handler'
 require 'toller/filters/where_handler'
 require 'toller/filtrator'
