@@ -1,0 +1,9 @@
+--protected
+--private
+--title "Toller Documentation (dfreerksen/toller)"
+--exclude spec
+lib/**/*.rb
+-
+README.md
+MIT-LICENSE
+docs/**/*.md

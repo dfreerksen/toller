@@ -13,7 +13,6 @@ AllCops:
   TargetRubyVersion: 3.0
   NewCops: enable
   Exclude:
-    - 'node_modules/**/*'
     - 'test/dummy/db/schema.rb'
     - 'vendor/**/*'
 
@@ -22,37 +21,14 @@ Bundler/OrderedGems:
   Exclude:
     - 'gemfiles/*.gemfile'
 
-# https://docs.rubocop.org/rubocop/latest/cops_metrics.html#metricsabcsize
-Metrics/AbcSize:
-  Exclude:
-    - 'lib/undercarriage/controllers/restful/actions/*_concern.rb'
-
-# https://docs.rubocop.org/rubocop/cops_metrics.html#metricsblocklength
-Metrics/BlockLength:
-  Exclude:
-    - 'spec/**/*.rb'
-
 # https://docs.rubocop.org/rubocop/latest/cops_metrics.html#metricsmethodlength
 Metrics/MethodLength:
   Exclude:
     - 'test/dummy/db/migrate/*.rb'
 
-# https://www.rubydoc.info/gems/rubocop-rspec/RuboCop/Cop/RSpec/ExampleLength
-RSpec/ExampleLength:
-  Exclude:
-    - 'spec/**/*'
-
-# https://rubydoc.info/gems/rubocop-rspec/RuboCop/Cop/RSpec/MultipleExpectations
-RSpec/MultipleExpectations:
-  Exclude:
-    - 'spec/lib/undercarriage/controllers/restful/**/*_concern_spec.rb'
-    - 'spec/models/*.rb'
-    - 'spec/requests/**/*.rb'
-
 # https://docs.rubocop.org/rubocop-rspec_rails/latest/cops_rspecrails.html#rspecrailsinferredspectype
 RSpecRails/InferredSpecType:
   Exclude:
-    - 'spec/models/*_spec.rb'
     - 'spec/requests/**/*_spec.rb'
 
 # https://docs.rubocop.org/rubocop/cops_style.html#styledocumentation
@@ -69,8 +45,6 @@ Style/FrozenStringLiteralComment:
 # https://docs.rubocop.org/rubocop/cops_style.html#stylestringliterals
 Style/StringLiterals:
   EnforcedStyle: double_quotes
-  Exclude:
-    - 'gemfiles/*.gemfile'
 
 # https://www.rubydoc.info/gems/rubocop/RuboCop/Cop/Style/HashSyntax
 Style/HashSyntax:

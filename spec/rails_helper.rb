@@ -3,9 +3,9 @@
 require "simplecov"
 
 SimpleCov.start do
-  add_filter "spec/"
-
-  add_group "Library", "lib"
+  group "Libraries", %r{lib/(\w*).rb}
+  skip "/spec/"
+  skip "/test/"
 end
 
 ENV["RAILS_ENV"] ||= "test"
@@ -13,6 +13,12 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../test/dummy/config/environment", __dir__)
 
 abort("The Rails environment is running in production mode!") if Rails.env.production?
+
+# `ActiveRecord::Migration.maintain_test_schema!` loads/checks the schema via a
+# temporary connection pool, which is useless for an in-memory sqlite3 database
+# (each new connection gets its own separate, empty database). Load the schema
+# directly onto the connection this process actually uses instead.
+load Rails.root.join("db/schema.rb")
 
 require "spec_helper"
 

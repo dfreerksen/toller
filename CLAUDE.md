@@ -26,14 +26,19 @@ RAILS_ENV=test bundle exec rspec spec/requests/sort/scope_spec.rb:12
 bundle exec rubocop
 
 # Test across supported Rails versions (after `bundle exec appraisal install`)
-bundle exec appraisal rails-5 bin/test
-bundle exec appraisal rails-6 bin/test
+bundle exec appraisal rails-6-0 bin/test
+bundle exec appraisal rails-6-1 bin/test
+
+# Run rspec across every appraisal — must pass -n 1
+bundle exec appraisal -n 1 rspec
 
 # Travis simulation (requires `gem install wwtd`)
 wwtd
 ```
 
-Note: the `Appraisals` file currently declares `rails-8-1` down through `rails-5.2` appraisals, but `.travis.yml` and the `gemfiles/` directory only reference `rails_5.gemfile`/`rails_6.gemfile` — these are out of sync.
+Note: the `Appraisals` file currently declares `rails-8-1` down through `rails-6-0` appraisals, but `.travis.yml` still references the old `rails_5.gemfile`/`rails_6.gemfile` — these are out of sync.
+
+Note: `bundle exec appraisal rspec` (naming no specific appraisal) defaults to running 2 appraisals in parallel via the `appraisal2` gem. Every appraisal points at the same `test/dummy/db/test.sqlite3` file, so parallel runs race on writes and intermittently fail with `SQLite3::BusyException: database is locked`. Always pass `-n 1` (or set `APPRAISAL_JOBS=1`) when invoking `appraisal` without a specific appraisal name.
 
 ## Architecture
 

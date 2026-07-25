@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+env:
+  RAILS_ENV: test
+
+jobs:
+  rspec:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+      - run: bundle exec rspec spec
+
+  rubocop:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+      - run: bundle exec rubocop
+
+  yard-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+      - run: bundle exec yard-lint
+
+  appraisal:
+    runs-on: ubuntu-latest
+    env:
+      # appraisal2 defaults to 2 parallel workers, but every appraisal gemfile
+      # shares the same BUNDLE_PATH (vendor/bundle) and test/dummy sqlite3 db,
+      # so concurrent installs/specs stall on Bundler's install-path lock.
+      APPRAISAL_JOBS: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+          bundler-cache: true
+      # `bundle exec appraisal install` runs each gemfile's "bundle check ||
+      # bundle install" inside appraisal2's own scrubbed subprocess env (see
+      # appraisal/command.rb#bundler_env), which reliably dies silently on a
+      # cold cache on this runner (no error text, exit 1) for the first
+      # gemfile it touches. Installing each gemfile directly, outside that
+      # subprocess wrapping, avoids it; `appraisal rspec` (below) doesn't hit
+      # the same path and runs fine through the normal wrapper.
+      #
+      # BUNDLE_PATH must be exported here explicitly: bundler-cache only
+      # writes it to .bundle/config, and Bundler doesn't inherit that file's
+      # settings for a Gemfile outside the config file's own directory (every
+      # appraisal gemfile lives under gemfiles/). Without it, each `bundle
+      # install` below silently installs into the system gem path instead of
+      # vendor/bundle, so `appraisal rspec` can't find what was "installed".
+      - name: Install appraisal dependencies
+        env:
+          BUNDLE_PATH: ${{ github.workspace }}/vendor/bundle
+        run: |
+          for gemfile in gemfiles/*.gemfile; do
+            bundle install --gemfile="$gemfile" --retry 3
+          done
+      - run: bundle exec appraisal rspec

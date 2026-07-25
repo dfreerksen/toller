@@ -3,10 +3,24 @@
 module Toller
   ##
   # Sort
-  #
   class Sort
-    attr_reader :parameter, :properties, :type
+    # @return [Symbol] the public sort param name
+    attr_reader :parameter
 
+    # @return [Hash] the sort's resolved options (:field, :default, :scope_name, etc.)
+    attr_reader :properties
+
+    # @return [Symbol] the sort type, e.g. :string, :integer, :scope
+    attr_reader :type
+
+    ##
+    # @param parameter [Symbol] the public sort param name
+    # @param type [Symbol] the sort type, e.g. :string, :integer, :scope
+    # @param options [Hash] sort options; merged over defaults for :field, :default, and :scope_name
+    # @option options [Symbol] :field the column/attribute to sort on; defaults to +parameter+
+    # @option options [Boolean] :default whether this sort applies automatically when no sort params were sent
+    # @option options [Symbol] :scope_name for type: :scope, the model scope to call; defaults to +parameter+
+    # @return [Toller::Sort] a new instance of Sort
     def initialize(parameter, type, options)
       @parameter = parameter
       @type = type
@@ -17,6 +31,13 @@ module Toller
       )
     end
 
+    ##
+    # Applies this sort to +collection+, dispatching to the scope or
+    # order handler based on +type+.
+    #
+    # @param collection [ActiveRecord::Relation] the collection to sort
+    # @param direction [Symbol] the sort direction, :asc or :desc
+    # @return [ActiveRecord::Relation] the sorted collection
     def apply!(collection, direction = :asc)
       if type == :scope
         Sorts::ScopeHandler.new.call(collection, direction, properties)
@@ -25,6 +46,8 @@ module Toller
       end
     end
 
+    ##
+    # @return [Boolean] whether this sort applies automatically when no sort params were sent at all
     def default
       properties[:default]
     end
