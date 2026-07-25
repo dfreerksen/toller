@@ -11,7 +11,9 @@ Gem::Specification.new do |spec|
   spec.email       = ["dfreerksen@gmail.com"]
   spec.homepage    = "https://github.com/dfreerksen/toller"
   spec.summary     = "URL-query-param-based filtering and sorting for Rails controllers."
-  spec.description = "Toller is a Rails engine that lets controllers declare filter_on/sort_on directives, then applies whichever filters and sorts are active for the current request to an ActiveRecord relation based on URL query parameters."
+  spec.description = "Toller is a Rails engine that lets controllers declare filter_on/sort_on directives, then " \
+                     "applies whichever filters and sorts are active for the current request to an ActiveRecord " \
+                     "relation based on URL query parameters."
   spec.license     = "MIT"
 
   spec.metadata = {
