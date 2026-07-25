@@ -22,8 +22,8 @@ module Toller
         end
 
         def inclusive_or_exclusive_range(value)
-          return '...' if value.include?('...')
-          return '..' if value.include?('..')
+          return "..." if value.include?("...")
+          return ".." if value.include?("..")
 
           nil
         end

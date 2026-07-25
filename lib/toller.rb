@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-require 'toller/filter'
-require 'toller/filters/mutators/boolean'
-require 'toller/filters/mutators/date'
-require 'toller/filters/mutators/datetime'
-require 'toller/filters/mutators/integer'
-require 'toller/filters/mutators/time'
-require 'toller/filters/scope_handler'
-require 'toller/filters/where_handler'
-require 'toller/retriever'
-require 'toller/sort'
-require 'toller/sorts/order_handler'
-require 'toller/sorts/scope_handler'
+require "toller/filter"
+require "toller/filters/mutators/boolean"
+require "toller/filters/mutators/date"
+require "toller/filters/mutators/datetime"
+require "toller/filters/mutators/integer"
+require "toller/filters/mutators/time"
+require "toller/filters/scope_handler"
+require "toller/filters/where_handler"
+require "toller/retriever"
+require "toller/sort"
+require "toller/sorts/order_handler"
+require "toller/sorts/scope_handler"
 
 ##
 # Toller
@@ -48,7 +48,7 @@ module Toller
   end
 
   def sort_params
-    params.fetch(sort_param_key.to_sym, '').split(',')
+    params.fetch(sort_param_key.to_sym, "").split(",")
   end
 
   def filter_param_key
