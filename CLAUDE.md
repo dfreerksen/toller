@@ -55,11 +55,11 @@ Note: `bundle exec appraisal rspec` (naming no specific appraisal) defaults to r
 `Filter#apply!` and `Sort#apply!` (`lib/toller/filter.rb`, `lib/toller/sort.rb`) both branch on `type == :scope`:
 
 - `type: :scope` → delegates to `Filters::ScopeHandler` / `Sorts::ScopeHandler`, which call a named scope on the model (`collection.public_send(scope_name || field, value_or_direction)`). This is the escape hatch for anything not expressible as a plain `where`/`order`.
-- Any other type (`:string`, `:text`, `:integer`, `:boolean`, `:date`, `:datetime`, `:time`) → delegates to `Filters::WhereHandler` (filters) or `Sorts::ColumnHandler` (sorts), which do a plain `collection.where(field => value)` / `collection.order(field => direction)`.
+- Any other type (`:string`, `:text`, `:integer`, `:boolean`, `:date`, `:datetime`, `:time`) → delegates to `Filters::ColumnHandler` (filters) or `Sorts::ColumnHandler` (sorts), which do a plain `collection.where(field => value)` / `collection.order(field => direction)`.
 
 ### Mutators
 
-`Filters::WhereHandler` runs the raw param value through a per-type mutator before the `where` call (`lib/toller/filters/mutators/*.rb`): `boolean` maps `%w[1 t true y yes]` to `true`; `integer`/`time`/`datetime` coerce the string; `date` additionally detects Ruby range syntax in the raw string (`..` / `...`) and converts it to a `Range` for range-based `where` queries. Sorts have no mutators — direction is always just `:asc`/`:desc` derived from a leading `-` in the sort param.
+`Filters::ColumnHandler` runs the raw param value through a per-type mutator before the `where` call (`lib/toller/filters/mutators/*.rb`): `boolean` maps `%w[1 t true y yes]` to `true` (case-insensitively). `date`, `datetime`, `time`, and `integer` all detect Ruby range syntax in the raw string (`..` for inclusive, `...` for exclusive) and convert it to a `Range` for range-based `where` queries — this logic is identical across the four, so it lives once in `Mutators::Common::Range` and each type module just does `extend Common::Range`. Sorts have no mutators — direction is always just `:asc`/`:desc` derived from a leading `-` in the sort param.
 
 ### Declaring filters/sorts
 

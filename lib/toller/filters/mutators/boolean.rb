@@ -16,7 +16,7 @@ module Toller
         # @param value [String] the raw filter param value
         # @return [Boolean] true if +value+ is one of "1", "t", "true", "y", "yes"; false otherwise
         def call(value)
-          %w[1 t true y yes].include?(value)
+          %w[1 t true y yes].include?(value.to_s.downcase)
         end
       end
     end

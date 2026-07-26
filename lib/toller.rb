@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require "toller/filter"
+require "toller/filters/column_handler"
 require "toller/filters/mutators/boolean"
+require "toller/filters/mutators/common/range"
 require "toller/filters/mutators/date"
 require "toller/filters/mutators/datetime"
 require "toller/filters/mutators/integer"
 require "toller/filters/mutators/time"
 require "toller/filters/scope_handler"
-require "toller/filters/where_handler"
 require "toller/retriever"
 require "toller/sort"
 require "toller/sorts/column_handler"
@@ -19,6 +20,18 @@ require "toller/sorts/scope_handler"
 # Query param based filtering and sorting
 module Toller
   extend ActiveSupport::Concern
+
+  ##
+  # Coerces a raw string value into a boolean, using the same rule Toller's
+  # own `type: :boolean` filters use internally. Handy inside a model scope
+  # backing a `type: :scope` filter, which receives the raw param value
+  # unmutated.
+  #
+  # @param value [String] the raw value
+  # @return [Boolean] true if +value+ is one of "1", "t", "true", "y", "yes"; false otherwise
+  def self.truthy(value)
+    Filters::Mutators::Boolean.call(value)
+  end
 
   ##
   # Applies every active filter/sort for the current request to +collection+.

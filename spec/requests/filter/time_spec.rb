@@ -52,7 +52,7 @@ RSpec.describe "Post filtering", type: :request do
       end
 
       it "returns the first item" do
-        expect(json_response[0][:title]).to eq("Bat Post")
+        expect(json_response[0][:title]).to eq("Baz Post")
       end
 
       it "returns the last item" do
@@ -60,7 +60,7 @@ RSpec.describe "Post filtering", type: :request do
       end
 
       it "returns the last invisible item" do
-        expect(json_response.size).to eq(3)
+        expect(json_response.size).to eq(2)
       end
     end
   end

@@ -4,18 +4,26 @@ module Toller
   # :nodoc:
   module Filters
     ##
-    # Where handler for filter
-    class WhereHandler
+    # Column handler for filter
+    class ColumnHandler
       ##
       # Applies a plain `where` clause to +collection+ for a non-scope filter.
+      #
+      # If +field+ isn't a real column on the collection's model, the filter is
+      # logged and skipped instead of raising once the relation is evaluated.
       #
       # @param collection [ActiveRecord::Relation] the collection to filter
       # @param type [Symbol] the filter type (e.g. :string, :integer, :boolean)
       # @param value [Object] the raw filter param value
       # @param properties [Hash] the filter's properties, used to resolve `:field`
-      # @return [ActiveRecord::Relation] the filtered collection
+      # @return [ActiveRecord::Relation] the filtered collection, or +collection+ unchanged if `:field` is unknown
       def call(collection, type, value, properties)
         field_name = properties[:field]
+
+        unless collection.klass.column_names.include?(field_name.to_s)
+          Rails.logger.warn("[Toller] Skipping filter: #{collection.klass} has no column `#{field_name}`")
+          return collection
+        end
 
         mutated_value = value_mutator(type, value)
 

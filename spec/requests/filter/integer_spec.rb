@@ -102,7 +102,7 @@ RSpec.describe "Post filtering", type: :request do
       end
 
       it "returns the last invisible item" do
-        expect(json_response.size).to eq(4)
+        expect(json_response.size).to eq(3)
       end
     end
   end

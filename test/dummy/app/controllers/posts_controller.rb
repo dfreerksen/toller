@@ -31,6 +31,10 @@ class PostsController < ApplicationController
   # Filter - Scope
   filter_on :body_contains, type: :scope, scope_name: :filter_on_body_contains
 
+  # Filter - Unresolvable column/scope (exercises Toller's missing target handling)
+  filter_on :bogus_column, type: :string, field: :nonexistent_column
+  filter_on :bogus_scope, type: :scope, scope_name: :nonexistent_scope
+
   # Sort - Default
   sort_on :default_sort_on_title, type: :scope, default: true
 

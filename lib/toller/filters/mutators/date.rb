@@ -8,43 +8,7 @@ module Toller
       ##
       # Date filter mutator
       module Date
-        module_function
-
-        ##
-        # Coerces a raw filter param into a date value or range.
-        #
-        # @param value [String] the raw filter param value
-        # @return [String,Range] the original value, or a Range when the value contains range syntax (`..` or `...`)
-        def call(value)
-          range_dots = inclusive_or_exclusive_range(value)
-
-          return value if range_dots.blank?
-
-          range(value, range_dots)
-        end
-
-        ##
-        # Builds a Range by splitting +value+ on the given range dots.
-        #
-        # @param value [String] the raw range string, e.g. "2024-01-01..2024-12-31"
-        # @param dots [String] the range separator, either ".." or "..."
-        # @return [Range] the resulting range
-        def range(value, dots)
-          Range.new(*value.split(dots))
-        end
-
-        ##
-        # Detects whether +value+ contains inclusive or exclusive range syntax.
-        #
-        # @param value [String] the raw filter param value
-        # @return [String,nil] "..." for an exclusive range, ".." for an inclusive range, or nil if +value+ is not
-        #                      a range
-        def inclusive_or_exclusive_range(value)
-          return "..." if value.include?("...")
-          return ".." if value.include?("..")
-
-          nil
-        end
+        extend Common::Range
       end
     end
   end
