@@ -12,7 +12,7 @@ module Toller
         # `call(value)` that returns +value+ unchanged, or a Range when +value+ contains
         # Ruby range syntax (`..` for inclusive, `...` for exclusive).
         #
-        # Note: methods here must refer to Ruby's core Range class as `::Range` — a bare
+        # Methods here must refer to Ruby's core Range class as `::Range` - a bare
         # `Range` would resolve to this module (Mutators::Common::Range) instead, since
         # Ruby's constant lookup checks the lexical scope before the top level.
         module Range
