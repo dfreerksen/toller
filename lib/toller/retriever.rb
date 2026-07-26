@@ -50,9 +50,9 @@ module Toller
     def filter
       active_retrievals.reduce(collection) do |items, retrieval|
         param_value = if retrieval.is_a?(Filter)
-                        filter_params.fetch(retrieval.parameter, nil)
+                        filter_params.fetch(downcased_parameter(retrieval), nil)
                       else
-                        sort_params.include?("-#{retrieval.parameter}") ? :desc : :asc
+                        sort_params.include?("-#{downcased_parameter(retrieval)}") ? :desc : :asc
                       end
 
         retrieval.apply!(items, param_value)
@@ -75,7 +75,7 @@ module Toller
     def filtering_activated?(retrieval)
       return true if filter_params.blank? && retrieval.default
 
-      filter_params.fetch(retrieval.parameter, nil).present?
+      filter_params.fetch(downcased_parameter(retrieval), nil).present?
     end
 
     ##
@@ -84,9 +84,19 @@ module Toller
     def sorting_activated?(retrieval)
       return true if sort_params.blank? && retrieval.default
 
-      string_parameter = retrieval.parameter.to_s
+      string_parameter = downcased_parameter(retrieval)
 
       sort_params.include?(string_parameter) || sort_params.include?("-#{string_parameter}")
+    end
+
+    ##
+    # `filter_params`/`sort_params` are downcased at the request level, so `retrieval.parameter`
+    # (declared as-is by `filter_on`/`sort_on`) must be downcased the same way before comparison.
+    #
+    # @param retrieval [Toller::Filter,Toller::Sort] the filter/sort to check
+    # @return [String] +retrieval.parameter+ downcased
+    def downcased_parameter(retrieval)
+      retrieval.parameter.to_s.downcase
     end
   end
 end

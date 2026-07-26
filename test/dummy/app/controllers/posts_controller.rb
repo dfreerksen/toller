@@ -15,6 +15,7 @@ class PostsController < ApplicationController
   # Filter - String
   filter_on :title, type: :string
   filter_on :post_title, type: :string, field: :title
+  filter_on :postTitle, type: :string, field: :title
 
   # Filter - Text
   filter_on :body, type: :text
@@ -44,6 +45,7 @@ class PostsController < ApplicationController
   # Sort - String
   sort_on :title, type: :string
   sort_on :post_title, type: :string, field: :title
+  sort_on :postTitle, type: :string, field: :title
 
   # Sort - Text
   sort_on :body, type: :text

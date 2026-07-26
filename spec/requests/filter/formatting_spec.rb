@@ -38,6 +38,21 @@ RSpec.describe "Post filtering", type: :request do
     end
   end
 
+  describe "when the filter is declared with a mixed-case parameter (`?filters[postTitle]=Foo Post`)" do
+    before do
+      get "/posts", params: { filters: { postTitle: "Foo Post" } },
+                    headers: { accept: "application/json" }
+    end
+
+    it "still matches the mixed-case declared parameter" do
+      expect(json_response[0][:title]).to eq("Foo Post")
+    end
+
+    it "returns specific item count" do
+      expect(json_response.size).to eq(1)
+    end
+  end
+
   describe "when one filter key is malformed but another is well-formed" do
     before do
       get "/posts", params: { filters: { " Title " => "Bar Post", post_title: "Bar Post" } },
