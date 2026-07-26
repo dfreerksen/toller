@@ -21,7 +21,10 @@ module Toller
     # @option options [Boolean] :default whether this filter applies automatically when no filter params were sent
     # @option options [Symbol] :scope_name for type: :scope, the model scope to call; defaults to +parameter+
     # @return [Toller::Filter] a new instance of Filter
+    # @raise [ArgumentError] if +type+ isn't one of {Toller::VALID_TYPES}
     def initialize(parameter, type, options)
+      validate_type!(parameter, type)
+
       @parameter = parameter
       @type = type
       @properties = options.reverse_merge(
@@ -50,6 +53,20 @@ module Toller
     # @return [Boolean] whether this filter applies automatically when no filter params were sent at all
     def default
       properties[:default]
+    end
+
+    private
+
+    ##
+    # @param parameter [Symbol] the public filter param name, used in the error message
+    # @param type [Symbol] the filter type to validate
+    # @return [nil]
+    # @raise [ArgumentError] if +type+ isn't one of {Toller::VALID_TYPES}
+    def validate_type!(parameter, type)
+      return if Toller::VALID_TYPES.include?(type)
+
+      raise ArgumentError, "Toller: unknown type `#{type.inspect}` for filter `#{parameter}` " \
+                           "(expected one of #{Toller::VALID_TYPES.join(', ')})"
     end
   end
 end

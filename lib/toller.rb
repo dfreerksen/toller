@@ -22,6 +22,9 @@ require "toller/sorts/scope_handler"
 module Toller
   extend ActiveSupport::Concern
 
+  # @return [Array<Symbol>] the types `filter_on`/`sort_on` recognize for their `type:` option
+  VALID_TYPES = %i[string text integer boolean date datetime time scope].freeze
+
   ##
   # Coerces a raw string value into a boolean, using the same rule Toller's
   # own `type: :boolean` filters use internally. Handy inside a model scope
