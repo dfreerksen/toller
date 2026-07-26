@@ -42,7 +42,7 @@ module Toller
       if type == :scope
         Sorts::ScopeHandler.new.call(collection, direction, properties)
       else
-        Sorts::OrderHandler.new.call(collection, direction, properties)
+        Sorts::ColumnHandler.new.call(collection, direction, properties)
       end
     end
 

@@ -57,6 +57,10 @@ class PostsController < ApplicationController
   sort_on :the_title, type: :scope
   sort_on :my_title, type: :scope, scope_name: :sort_on_title
 
+  # Sort - Unresolvable column/scope (exercises Toller's missing target handling)
+  sort_on :bogus_column, type: :string, field: :nonexistent_column
+  sort_on :bogus_scope, type: :scope, scope_name: :nonexistent_scope
+
   def index
     render json: retrieve(Post.all)
   end

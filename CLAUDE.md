@@ -55,7 +55,7 @@ Note: `bundle exec appraisal rspec` (naming no specific appraisal) defaults to r
 `Filter#apply!` and `Sort#apply!` (`lib/toller/filter.rb`, `lib/toller/sort.rb`) both branch on `type == :scope`:
 
 - `type: :scope` → delegates to `Filters::ScopeHandler` / `Sorts::ScopeHandler`, which call a named scope on the model (`collection.public_send(scope_name || field, value_or_direction)`). This is the escape hatch for anything not expressible as a plain `where`/`order`.
-- Any other type (`:string`, `:text`, `:integer`, `:boolean`, `:date`, `:datetime`, `:time`) → delegates to `Filters::WhereHandler` (filters) or `Sorts::OrderHandler` (sorts), which do a plain `collection.where(field => value)` / `collection.order(field => direction)`.
+- Any other type (`:string`, `:text`, `:integer`, `:boolean`, `:date`, `:datetime`, `:time`) → delegates to `Filters::WhereHandler` (filters) or `Sorts::ColumnHandler` (sorts), which do a plain `collection.where(field => value)` / `collection.order(field => direction)`.
 
 ### Mutators
 

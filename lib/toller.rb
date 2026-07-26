@@ -10,7 +10,7 @@ require "toller/filters/scope_handler"
 require "toller/filters/where_handler"
 require "toller/retriever"
 require "toller/sort"
-require "toller/sorts/order_handler"
+require "toller/sorts/column_handler"
 require "toller/sorts/scope_handler"
 
 ##
