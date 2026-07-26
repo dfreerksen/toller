@@ -29,13 +29,16 @@ bundle exec rubocop
 bundle exec appraisal rails-6-0 bin/test
 bundle exec appraisal rails-6-1 bin/test
 
-# Run rspec across every appraisal — must pass -n 1
+# Run rspec across every appraisal
+bundle exec appraisal rspec
+
+# Run rspec across every appraisal with one runner
 bundle exec appraisal -n 1 rspec
 ```
 
 CI runs on GitHub Actions (`.github/workflows/ci.yml`): rspec, rubocop, yard-lint, and the full appraisal matrix. There is no Travis config anymore.
 
-Note: `bundle exec appraisal rspec` (naming no specific appraisal) defaults to running 2 appraisals in parallel via the `appraisal2` gem. Every appraisal points at the same `test/dummy/db/test.sqlite3` file, so parallel runs race on writes and intermittently fail with `SQLite3::BusyException: database is locked`. Always pass `-n 1` (or set `APPRAISAL_JOBS=1`) when invoking `appraisal` without a specific appraisal name.
+Note: `bundle exec appraisal rspec` (naming no specific appraisal) defaults to running 2 appraisals in parallel via the `appraisal2` gem. `test/dummy/config/database.yml` uses `database: ":memory:"` for the test env, so each appraisal subprocess gets its own isolated in-memory database — parallel runs no longer race on a shared file (`-n 1`/`APPRAISAL_JOBS=1` was needed when the test DB was a shared `db/test.sqlite3` file; it isn't anymore, though it's still a valid way to force serial runs if needed).
 
 ## Architecture
 
@@ -44,15 +47,15 @@ Note: `bundle exec appraisal rspec` (naming no specific appraisal) defaults to r
 `Retriever.filter(collection, filter_params, sort_params, retrievals)` (`lib/toller/retriever.rb`) is the single entry point invoked by `Toller#retrieve`. It:
 
 1. Builds `retrievals` — the flattened list of every `Filter` and `Sort` registered via `filter_on`/`sort_on` across the including class's ancestor chain (`self.class.ancestors.flat_map { |k| k.try(:_filters) }`). Filters and sorts share the same `_filters` array on the class.
-2. Selects only the *active* retrievals: a `Filter` is active if its param key is present in `filter_params`, or if no filter params were sent at all and the filter is marked `default: true`. Sorts work the same way against `sort_params` (a comma-split array like `['-published_at', 'title']`).
+2. Selects only the *active* retrievals: a `Filter` is active if its param key is present in `filter_params`, or if no filter params were sent at all and the filter is marked `default: true`. Sorts work the same way against `sort_params` (a comma-split array like `['-published_at', 'title']`). Matching is case-insensitive on both sides: `Toller#filter_params`/`#sort_params` downcase (and strip) the incoming request keys/tokens, and `Retriever` downcases `retrieval.parameter` the same way before comparing — so a request param's casing never has to match the declared `parameter`'s casing. This only affects *which* retrieval activates; the `field:` actually queried keeps its declared casing untouched (important for a genuinely camelCase DB column — see `filter_on :userID`/`sort_on :userID` in the dummy app).
 3. Reduces over the active retrievals, calling `retrieval.apply!(collection, value)` on each and threading the returned relation forward — so each filter/sort chains a `.where`/`.order`/scope call onto the previous result.
 
 ### Filter vs Sort dispatch
 
 `Filter#apply!` and `Sort#apply!` (`lib/toller/filter.rb`, `lib/toller/sort.rb`) both branch on `type == :scope`:
 
-- `type: :scope` → delegates to `Filters::ScopeHandler` / `Sorts::ScopeHandler`, which call a named scope on the model (`collection.public_send(scope_name || field, value_or_direction)`). This is the escape hatch for anything not expressible as a plain `where`/`order`.
-- Any other type (`:string`, `:text`, `:integer`, `:boolean`, `:date`, `:datetime`, `:time`) → delegates to `Filters::ColumnHandler` (filters) or `Sorts::ColumnHandler` (sorts), which do a plain `collection.where(field => value)` / `collection.order(field => direction)`.
+- `type: :scope` → delegates to `Filters::ScopeHandler` / `Sorts::ScopeHandler`, which call a named scope on the model (`collection.public_send(scope_name || field, value_or_direction)`). This is the escape hatch for anything not expressible as a plain `where`/`order`. Before calling, both handlers check `Toller::ScopeResolver.own_class_method?(collection.klass, scoped_name)` (`lib/toller/scope_resolver.rb`) rather than a bare `respond_to?` — it walks the model's singleton-class ancestors up to (excluding) `ActiveRecord::Base.singleton_class`, so a typo'd `scope_name:` that happens to collide with an inherited framework method (`delete_all`, `where`, `sum`, etc.) is treated as unresolved (logged + skipped) instead of being called.
+- Any other type (`:string`, `:text`, `:integer`, `:boolean`, `:date`, `:datetime`, `:time`) → delegates to `Filters::ColumnHandler` (filters) or `Sorts::ColumnHandler` (sorts), which do a plain `collection.where(field => value)` / `collection.order(field => direction)`. Both first confirm `field` is a real column *and* that its actual column type (`collection.klass.columns_hash[field].type`) matches the declared `type:`, logging and skipping (rather than raising or silently misapplying a mismatched mutator) if either check fails.
 
 ### Mutators
 
@@ -60,7 +63,7 @@ Note: `bundle exec appraisal rspec` (naming no specific appraisal) defaults to r
 
 ### Declaring filters/sorts
 
-`filter_on(parameter, type:, **options)` / `sort_on(parameter, type:, **options)` (in `lib/toller.rb`'s `class_methods`) construct a `Filter`/`Sort` and push it onto `_filters`. Key options, all defaulted via `reverse_merge` in `Filter#initialize`/`Sort#initialize`:
+`filter_on(parameter, type:, **options)` / `sort_on(parameter, type:, **options)` (in `lib/toller.rb`'s `class_methods`) construct a `Filter`/`Sort` and push it onto `_filters`. Both constructors validate `type:` against `Toller::VALID_TYPES` (`%i[string text integer boolean date datetime time scope]`, defined in `lib/toller.rb`) and raise `ArgumentError` immediately if it's anything else — a typo like `type: :sting` fails loudly at declaration time rather than silently falling through with no mutator applied. Key options, all defaulted via `reverse_merge` in `Filter#initialize`/`Sort#initialize`:
 
 - `field:` — the actual column/attribute to query; defaults to `parameter`. Lets you expose a different public param name than the underlying column (see `filter_on :post_title, type: :string, field: :title` in the dummy app).
 - `scope_name:` — for `type: :scope`, the model scope to call; defaults to `parameter`.

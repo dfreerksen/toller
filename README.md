@@ -64,7 +64,7 @@ To run tests with Appraisal, run
 $ bundle exec appraisal rspec
 ```
 
-`-n 1` forces Appraisal2 to run one Rails version at a time. Without it, Appraisal2 defaults to running 2 appraisals in parallel, and since every appraisal shares the same `test/dummy/db/test.sqlite3` file, concurrent runs can intermittently fail with `SQLite3::BusyException: database is locked`.
+Without any flags, Appraisal2 defaults to running 2 appraisals in parallel. The test database is in-memory (`database: ":memory:"`), so each appraisal subprocess gets its own isolated database and parallel runs don't conflict. Pass `-n 1` to force one Rails version at a time instead.
 
 ```bash
 $ bundle exec appraisal rails-6-0 rspec
