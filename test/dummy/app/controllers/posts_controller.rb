@@ -9,6 +9,10 @@ class PostsController < ApplicationController
   # Filter - Integer
   filter_on :priority, type: :integer
 
+  # Filter - Integer against a genuinely mixed-case column (quoted "userID", not "user_id");
+  # exercises Toller's case-insensitive param matching against a real camelCase column name
+  filter_on :userID, type: :integer
+
   # Filter - Boolean
   filter_on :visible, type: :boolean
 
@@ -49,6 +53,10 @@ class PostsController < ApplicationController
 
   # Sort - Integer
   sort_on :id, type: :integer
+
+  # Sort - Integer against a genuinely mixed-case column (quoted "userID", not "user_id");
+  # exercises Toller's case-insensitive param matching against a real camelCase column name
+  sort_on :userID, type: :integer
 
   # Sort - String
   sort_on :title, type: :string
