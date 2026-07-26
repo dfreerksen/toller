@@ -9,21 +9,20 @@ module Toller
       ##
       # Applies a plain `where` clause to +collection+ for a non-scope filter.
       #
-      # If +field+ isn't a real column on the collection's model, the filter is
-      # logged and skipped instead of raising once the relation is evaluated.
+      # If +field+ isn't a real column on the collection's model, or the column's actual type
+      # doesn't match the declared `type:`, the filter is logged and skipped instead of raising
+      # (or silently applying a mismatched mutator) once the relation is evaluated.
       #
       # @param collection [ActiveRecord::Relation] the collection to filter
       # @param type [Symbol] the filter type (e.g. :string, :integer, :boolean)
       # @param value [Object] the raw filter param value
       # @param properties [Hash] the filter's properties, used to resolve `:field`
-      # @return [ActiveRecord::Relation] the filtered collection, or +collection+ unchanged if `:field` is unknown
+      # @return [ActiveRecord::Relation] the filtered collection, or +collection+ unchanged if `:field` is
+      #                                  unknown or its actual column type doesn't match `type`
       def call(collection, type, value, properties)
         field_name = properties[:field]
 
-        unless collection.klass.column_names.include?(field_name.to_s)
-          Rails.logger.warn("[Toller] Skipping filter: #{collection.klass} has no column `#{field_name}`")
-          return collection
-        end
+        return collection unless resolvable_column?(collection, field_name, type)
 
         mutated_value = value_mutator(type, value)
 
@@ -31,6 +30,29 @@ module Toller
       end
 
       private
+
+      ##
+      # Confirms +field_name+ is a real column on +collection+'s model whose actual type matches
+      # +type+, logging a warning and returning false otherwise.
+      #
+      # @param collection [ActiveRecord::Relation] the collection to filter
+      # @param field_name [Symbol] the column to look up
+      # @param type [Symbol] the filter's declared type
+      # @return [Boolean] whether +field_name+ exists and its actual column type matches +type+
+      def resolvable_column?(collection, field_name, type)
+        unless collection.klass.column_names.include?(field_name.to_s)
+          Rails.logger.warn("[Toller] Skipping filter: #{collection.klass} has no column `#{field_name}`")
+          return false
+        end
+
+        actual_type = collection.klass.columns_hash[field_name.to_s].type
+        return true if actual_type == type
+
+        Rails.logger.warn(
+          "[Toller] Skipping filter: #{collection.klass}##{field_name} is `#{actual_type}`, declared as `#{type}`"
+        )
+        false
+      end
 
       ##
       # Value mutator

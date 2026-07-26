@@ -59,4 +59,22 @@ RSpec.describe "Post filtering", type: :request do
       expect(Rails.logger).to have_received(:warn).with(/no scope `delete_all`/)
     end
   end
+
+  describe "when a filter's declared type doesn't match its column's actual type " \
+           "(`?filter[mismatched_type]=Foo Post`, `type: :integer, field: :title`)" do
+    before do
+      allow(Rails.logger).to receive(:warn)
+
+      get "/posts", params: { filters: { mismatched_type: "Foo Post" } },
+                    headers: { accept: "application/json" }
+    end
+
+    it "does not raise, leaving the collection unfiltered" do
+      expect(json_response.count).to eq(2)
+    end
+
+    it "logs a warning naming the type mismatch" do
+      expect(Rails.logger).to have_received(:warn).with(/is `string`, declared as `integer`/)
+    end
+  end
 end

@@ -36,6 +36,10 @@ class PostsController < ApplicationController
   filter_on :bogus_column, type: :string, field: :nonexistent_column
   filter_on :bogus_scope, type: :scope, scope_name: :nonexistent_scope
 
+  # Filter - declared type doesn't match the actual column type (exercises Toller's
+  # protection against silently applying a mismatched mutator)
+  filter_on :mismatched_type, type: :integer, field: :title
+
   # Filter - scope_name colliding with a real ActiveRecord class method (exercises Toller's
   # protection against public_send-ing an inherited framework method instead of an own scope)
   filter_on :dangerous_scope_collision, type: :scope, scope_name: :delete_all
@@ -70,6 +74,10 @@ class PostsController < ApplicationController
   # Sort - Unresolvable column/scope (exercises Toller's missing target handling)
   sort_on :bogus_column, type: :string, field: :nonexistent_column
   sort_on :bogus_scope, type: :scope, scope_name: :nonexistent_scope
+
+  # Sort - declared type doesn't match the actual column type (exercises Toller's
+  # protection against silently applying a mismatched mutator)
+  sort_on :mismatched_type, type: :integer, field: :title
 
   # Sort - scope_name colliding with a real ActiveRecord class method (exercises Toller's
   # protection against public_send-ing an inherited framework method instead of an own scope)

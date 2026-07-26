@@ -59,4 +59,22 @@ RSpec.describe "Post sorting", type: :request do
       expect(Rails.logger).to have_received(:warn).with(/no scope `delete_all`/)
     end
   end
+
+  describe "when a sort's declared type doesn't match its column's actual type " \
+           "(`?sort=mismatched_type`, `type: :integer, field: :title`)" do
+    before do
+      allow(Rails.logger).to receive(:warn)
+
+      get "/posts", params: { sort: "mismatched_type" },
+                    headers: { accept: "application/json" }
+    end
+
+    it "does not raise, leaving the collection's natural order" do
+      expect(json_response[0][:title]).to eq("Foo Post")
+    end
+
+    it "logs a warning naming the type mismatch" do
+      expect(Rails.logger).to have_received(:warn).with(/is `string`, declared as `integer`/)
+    end
+  end
 end
