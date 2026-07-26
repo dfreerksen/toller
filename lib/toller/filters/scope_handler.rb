@@ -19,7 +19,7 @@ module Toller
       def call(collection, value, properties)
         scoped_name = properties[:scope_name] || properties[:field]
 
-        unless collection.klass.respond_to?(scoped_name)
+        unless ScopeResolver.own_class_method?(collection.klass, scoped_name)
           Rails.logger.warn("[Toller] Skipping filter: #{collection.klass} has no scope `#{scoped_name}`")
           return collection
         end
