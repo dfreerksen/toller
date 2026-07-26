@@ -16,7 +16,7 @@ See the [wiki](https://github.com/dfreerksen/toller/wiki) for usage information.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'toller', '~> 1.1'
+gem 'toller', '~> 1.2'
 ```
 
 And then execute:
