@@ -26,6 +26,26 @@ RSpec.describe "Post filtering", type: :request do
       end
     end
 
+    describe "with expiration_time items in array " \
+             "(`?filter[expiration_time][]=03:41:18&filter[expiration_time][]=15:41:18`)" do
+      before do
+        get "/posts", params: { filters: { expiration_time: ["03:41:18", "15:41:18"] } },
+                      headers: { accept: "application/json" }
+      end
+
+      it "returns the first item" do
+        expect(json_response[0][:title]).to eq("Bar Post")
+      end
+
+      it "returns the last item" do
+        expect(json_response[-1][:title]).to eq("Foo Post")
+      end
+
+      it "returns the correct number of items" do
+        expect(json_response.size).to eq(2)
+      end
+    end
+
     describe "with inclusive (..) range of items (`?filter[expiration_time]=00:00..12:00:00`)" do
       before do
         get "/posts", params: { filters: { expiration_time: "00:00..12:00:00" } },

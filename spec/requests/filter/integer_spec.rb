@@ -49,7 +49,7 @@ RSpec.describe "Post filtering", type: :request do
       end
     end
 
-    describe "with priority items in array (`?filter[priority]=[1,3]`)" do
+    describe "with priority items in array (`?filter[priority][]=1&filter[priority][]=3`)" do
       before do
         get "/posts", params: { filters: { priority: [1, 3] } },
                       headers: { accept: "application/json" }

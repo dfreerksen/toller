@@ -26,6 +26,26 @@ RSpec.describe "Post filtering", type: :request do
       end
     end
 
+    describe "with published_at items in array " \
+             "(`?filter[published_at][]=1775-11-10 03:41:18&filter[published_at][]=2020-05-25 00:00:00`)" do
+      before do
+        get "/posts", params: { filters: { published_at: ["1775-11-10 03:41:18", "2020-05-25 00:00:00"] } },
+                      headers: { accept: "application/json" }
+      end
+
+      it "returns the first item" do
+        expect(json_response[0][:title]).to eq("Baz Post")
+      end
+
+      it "returns the last item" do
+        expect(json_response[-1][:title]).to eq("Foo Post")
+      end
+
+      it "returns the correct number of items" do
+        expect(json_response.size).to eq(2)
+      end
+    end
+
     describe "with inclusive (..) range of items (`?filter[published_at]=1775/11/10 00:00..1845/12/29 12:00:00`)" do
       before do
         get "/posts", params: { filters: { published_at: "1775/11/10 00:00..1845/12/29 12:00:00" } },
