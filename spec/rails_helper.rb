@@ -3,7 +3,7 @@
 require "simplecov"
 
 SimpleCov.start do
-  group "Libraries", %r{lib/(\w*).rb}
+  group "Libraries", "lib"
   skip "/spec/"
   skip "/test/"
 end

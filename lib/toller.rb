@@ -33,8 +33,16 @@ module Toller
   #
   # @param value [String] the raw value
   # @return [Boolean] true if +value+ is one of "1", "t", "true", "y", "yes"; false otherwise
+  #
+  # @example Model
+  #   scope :filter_on_visibility, ->(value) { where(visible: Toller.truthy(value)) }
+  #   scope :filter_on_visibility, ->(value) { where(visible: Toller.truthy?(value)) }
   def self.truthy(value)
     Filters::Mutators::Boolean.call(value)
+  end
+
+  class << self
+    alias truthy? truthy
   end
 
   ##
