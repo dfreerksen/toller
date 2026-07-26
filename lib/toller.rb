@@ -78,15 +78,19 @@ module Toller
   end
 
   ##
+  # Filter params
+  #
   # @return [Hash] the current request's filter params, keyed by filter parameter name
   def filter_params
-    params.fetch(filter_param_key.to_sym, {})
+    params.fetch(filter_param_key.to_sym, {}).transform_keys { |key| key.to_s.strip.downcase }
   end
 
   ##
+  # Sort param split
+  #
   # @return [Array<String>] the current request's sort params, e.g. ['-published_at', 'title']
   def sort_params
-    params.fetch(sort_param_key.to_sym, "").split(",")
+    params.fetch(sort_param_key.to_sym, "").split(",").map { |param| param.strip.downcase }.reject(&:empty?)
   end
 
   ##
